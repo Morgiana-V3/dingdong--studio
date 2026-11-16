@@ -1,0 +1,52 @@
+{
+  "apiVersion": 1,
+  "id": "tieba-subscription",
+  "name": "贴吧兴趣精选",
+  "version": "1.4.0",
+  "description": "AI 按自然语言规则调用候选、数值过滤与首楼读取工具，精选后推送原文。",
+  "entry": "index.cjs",
+  "capabilities": ["tieba.read", "ai.tools"],
+  "fields": [
+    {
+      "key": "globalFilter",
+      "label": "总过滤说明（作为所有贴吧的默认规则）",
+      "type": "textarea"
+    },
+    {
+      "key": "forums",
+      "label": "贴吧配置（单独规则优先）",
+      "type": "forums",
+      "required": true,
+      "default": [
+        {
+          "name": "",
+          "filter": ""
+        }
+      ]
+    },
+    {
+      "key": "minScore",
+      "label": "兴趣相关度门槛（1–100，建议 75）",
+      "type": "number",
+      "default": 75
+    },
+    {
+      "key": "maxItems",
+      "label": "所有贴吧合计每轮最多精选几条（1–5）",
+      "type": "number",
+      "default": 3
+    },
+    {
+      "key": "includeImages",
+      "label": "附上原帖配图",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "useSearch",
+      "label": "按兴趣补充关键词检索",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}

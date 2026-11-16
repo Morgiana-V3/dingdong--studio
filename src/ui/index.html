@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src https://*.xhscdn.com https://pbs.twimg.com 'self' data: https://tiebapic.baidu.com https://imgsrc.baidu.com https://imgsa.baidu.com; connect-src 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DingDong Studio</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">m<span>•</span></span>
+        <div>DingDong Studio<small>我的推送工作台</small></div>
+      </div>
+      <nav aria-label="主导航">
+        <button data-page="tasks" class="selected">任务</button>
+        <button data-page="plugins">插件</button>
+        <button data-page="channels">推送渠道</button>
+        <button data-page="providers">AI 配置</button>
+        <button data-page="history">运行记录</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button data-page="settings">应用设置</button>
+        <span class="local-status">本机运行 · v0.1.0</span>
+      </div>
+    </aside>
+    <main>
+      <div class="titlebar"><span>Mac mini 工作区</span><span>北京时间 · UTC+8</span></div>
+      <header>
+        <div>
+          <h1 id="page-title">任务</h1>
+          <p id="eyebrow">工作区</p>
+        </div>
+        <div id="toolbar"></div>
+      </header>
+      <div id="notice" role="status" hidden></div>
+      <section id="content"></section>
+    </main>
+    <dialog id="editor"><div id="dialog-content"></div></dialog>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

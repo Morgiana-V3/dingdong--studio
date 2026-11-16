@@ -1,0 +1,47 @@
+{
+  "apiVersion": 1,
+  "id": "x-interests",
+  "name": "X 兴趣发现",
+  "version": "1.3.0",
+  "entry": "index.cjs",
+  "description": "AI 根据兴趣搜索推特，按需阅读原帖，再推送原文与配图。",
+  "capabilities": ["x.read", "ai.tools"],
+  "fields": [
+    {
+      "key": "accountId",
+      "label": "登录账号 ID",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "interests",
+      "label": "兴趣与筛选要求",
+      "type": "textarea",
+      "required": true
+    },
+    {
+      "key": "maxItems",
+      "label": "每轮最多推送条数（1–5）",
+      "type": "number",
+      "default": 3
+    },
+    {
+      "key": "includeImages",
+      "label": "附上原帖配图",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "useFollowing",
+      "label": "读取关注时间线",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "useSearch",
+      "label": "按兴趣补充关键词检索",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}

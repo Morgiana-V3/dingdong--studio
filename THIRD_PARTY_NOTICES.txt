@@ -1,0 +1,146 @@
+MiniPush 贴吧信息源参考记录（2026-11-14）
+
+本应用没有内嵌 RSSHub、aiotieba 或 MediaCrawler 框架。
+公开贴吧采集使用宿主独立实现的表单请求、分页与标准化层；
+MD5 参数签名根据 aiotieba 的公开实现移植为 JavaScript，保留其许可如下。
+
+1. aiotieba — lumina37 and contributors — Unlicense
+版本：5baf2ab5539606c0b346cba7105145fe7330129b
+https://github.com/lumina37/aiotieba/tree/5baf2ab5539606c0b346cba7105145fe7330129b
+参考 helper/crypto/sign.py、helper/crypto/const.py、get_threads 及 ThreadSortType 定义。
+采用参数排序后 MD5 签名；sort_type=1 表示按创建时间读取。
+
+2. RSSHub — DIYgod and contributors — AGPL-3.0（本次读取版本）
+版本：6e9ae2cfc02bafb07f551a4c1b9129f4de2febc1
+https://github.com/DIYgod/RSSHub/tree/6e9ae2cfc02bafb07f551a4c1b9129f4de2febc1/lib/routes/baidu/tieba
+研究其贴吧 RSS 路由、客户端 JSON 数据来源与可选 Cookie 的分工；
+未复制或打包 RSSHub 代码。实际排序通过真实请求与 aiotieba 枚举交叉验证。
+
+3. MediaCrawler — NanmiCoder and contributors — NON-COMMERCIAL LEARNING LICENSE 1.1
+版本：306ab4ca26c0e44fb87ede0e40e98748752815a6
+https://github.com/NanmiCoder/MediaCrawler/tree/306ab4ca26c0e44fb87ede0e40e98748752815a6/media_platform/tieba
+仅研究浏览器登录、页面上下文请求、PC API 的架构；未复制或打包其代码。
+当前公开吧新帖需求不需要引入其完整浏览器采集流程。
+
+采集对象为公开贴吧标题与摘要。接口并非百度向本应用承诺稳定的开放 API；
+无法读取、分页不完整或需要验证时显式失败，不将失败解释为没有新帖。
+
+aiotieba license:
+
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <https://unlicense.org>
+
+2026-11-15 兴趣精选与链接更新：
+参考 TrendRadar 的自然语言兴趣与相关度门槛配置，以及 rssnotify 的筛选/通知分离设计；未复制其实现。
+https://github.com/sansan0/TrendRadar/blob/master/config/config.yaml
+https://github.com/transformable-app/rssnotify
+采集增加 sort_type=6 的最近回复顺序，与 sort_type=1 的创建顺序各取一页构成有限候选。
+贴吧 Scheme 参数参考第三方客户端解析代码（独立构造链接，未复制客户端代码）：
+https://github.com/137458/tieba-lite-harmony/blob/main/entry/src/main/ets/utils/AppLinkingUtil.ets
+Server 酱 scopen 的启动/传参边界参照官方说明：https://sc3.ft07.com/doc
+App 入口是否能从 Server 酱直接打开指定帖子，仍需手机实测，不以代码测试代替真机结果。
+
+2026-11-15 首楼原文展示：
+参考 aiotieba get_posts 的分页与首楼读取结构，独立实现客户端 JSON pb/page 请求。
+https://github.com/lumina37/aiotieba/blob/master/src/aiotieba/api/get_posts/_api.py
+实际验证 kz、pn=1、rn=2 参数，严格选取 floor=1，不将后续回复当成楼主正文。
+Server 酱 Markdown 与客户端样式边界参考官方文档：
+https://github.com/easychen/serverchan3-doc/blob/main/pages/zh/serverchan3/app/use.mdx
+https://github.com/easychen/serverchan3-doc/blob/main/pages/zh/serverchan3/faq.mdx
+
+2026-11-15 AI 工具调用：
+使用 OpenAI Responses function calling 协议，strict 参数 schema，禁用并行工具调用。
+store:false 模式下保留完整 output/reasoning 项并携带 function_call_output 继续请求。
+https://developers.openai.com/api/docs/guides/function-calling
+自行实现工具循环、参数验证和日志；未引入第三方 Agent 框架。
+
+2026-11-15 X 兴趣发现：
+调研 RSSHub 的 Twitter web-api 路由、Twikit 的 Tweet 数据结构以及 twscrape 的搜索能力。
+https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/utils.ts
+https://github.com/d60/twikit/blob/main/twikit/tweet.py
+https://github.com/vladkens/twscrape
+未复制或内嵌以上项目的实现，参考其 HTTP / GraphQL 读取架构独立实现后台适配。
+
+2026-11-15 X 后台 HTTP 读取：
+x-client-transaction-id 0.3.3 — Lqm1 and contributors — MIT。
+https://github.com/Lqm1/x-client-transaction-id
+使用其网页交易签名实现；依赖和 LICENSE 随应用打包。
+undici 8.12.4 — Node.js contributors — MIT，用于后台进程代理适配。
+https://github.com/nodejs/undici
+公共 query ID 和 features 元数据来源：
+https://github.com/fa0311/TwitterInternalAPIDocument/blob/master/docs/json/API.json
+只使用校验后的 query ID 与布尔 features，忽略元数据中的 endpoint URL。
+参考 RSSHub 的公共元数据与 MIT 签名库组合，未复制其 AGPL 代码：
+https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/client-transaction-id.ts
+https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/gql-id-resolver.ts
+本方式不是 X 官方开放 API；平台改版、账号验证、限流可能影响读取。
+
+Chrome 登录兼容：
+playwright-core 1.65.1 — Microsoft and contributors — Apache-2.0。
+随应用保留 LICENSE 与 NOTICE；不打包 Chrome。
+Chrome 仅用于主动登录与授权导入，不参与任务搜索和详情读取。
+导入的 x.com 必需 Cookie 使用 Electron safeStorage 加密保存，随后断开浏览器。
+不保存密码，不向插件或 AI 发送 Cookie。这不是 X OAuth。
+https://playwright.dev/docs/api/class-browsertype#browser-type-connect-over-cdp
+https://developer.chrome.com/blog/chrome-devtools-mcp-debug-your-browser-session
+
+2026-11-15 X 推送排版与链接：
+参考 RSSHub 对 URL entities、媒体占位链接、正文与引用分区的处理思路，未复制其代码或 HTML 模板。
+https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/utils.ts
+App 帖子链接格式参考 DeeplinkX 的 TwitterOpenTweetAction（未引入依赖）：
+https://github.com/DeepLinkX/DeeplinkX/blob/00d9d2c7c1affe4e2ee459a01afeba82a1480eac/lib/src/apps/downloadable_apps/twitter.dart
+Server 酱仅支持 Markdown、不支持任意 HTML/CSS；手机渲染与 App 唤起结果不能由桌面预览代替。
+https://github.com/easychen/serverchan3-doc/blob/main/pages/zh/serverchan3/app/use.mdx
+
+2026-11-16 叮咚与 HTML 图文：
+按用户仓库协议独立实现 TypeScript 发送适配，未修改其服务端和手机 App。
+https://github.com/Morgiana-V3/dingdong/tree/82cb993b21798f1b93efb1caadbc2c19ea570cf9
+参考其 tools/render.py 的自包含 HTML、mobile/lib/features/reader/document.dart 的安全边界。
+参考 Fluent Reader 的专注阅读、Miniflux 的响应式图文和系统深色设计思路；没有复制它们的 CSS 或实现。
+https://github.com/yang991178/fluent-reader
+https://github.com/miniflux/v2
+HTML 图文模板和文章类型由 MiniPush 独立实现。
+生产依赖 markdown-it 14.1.0（MIT）用于 Markdown 转换，linkedom 0.18.12（ISC）用于静态 HTML 处理，许可证随依赖打包。
+
+2026-11-16 贴吧行内表情：
+依据公开的 content type 2/11、text 编号、c 描述独立实现解析与位置保留。
+https://github.com/lumina37/aiotieba/blob/master/src/aiotieba/api/_classdef/contents.py
+表情资源族命名参考公开协议笔记，使用百度静态图片，不复制第三方渲染实现：
+https://github.com/Sorceresssis/TiebaArchiver/blob/main/docs/tieba_data_notes.md
+真实请求验证了 image_emoticon16 的 PNG、i_f52 和 bearchildren_01 的 GIF 地址。
+
+2026-11-16 多来源检索：
+贴吧搜索字段和时间倒序语义参考 aiotieba，TypeScript 适配独立实现：
+https://github.com/lumina37/aiotieba/blob/master/src/aiotieba/api/search_in_forum/_api.py
+https://github.com/lumina37/aiotieba/blob/master/src/aiotieba/enums.py
+X 关注时间线参数参考 twikit，动态 GET 元数据使用既有 TwitterInternalAPIDocument；未引入新依赖：
+https://github.com/d60/twikit/blob/main/twikit/client/gql.py
+
+Xiaohongshu retrieval research reference (2026-11-17)
+- xpzouying/xiaohongshu-mcp (MIT), https://github.com/xpzouying/xiaohongshu-mcp
+- Reviewed xiaohongshu/feeds.go, login.go, search.go, feed_detail.go and search_ready.go.
+- MiniPush independently implements a bounded, read-only TypeScript/Electron adapter using official page state.
+- No upstream binary, Go source, signing service, publishing capability or dependency is bundled.
+- The upstream search readiness checks informed distinguishing pending/failed searches from confirmed empty responses.

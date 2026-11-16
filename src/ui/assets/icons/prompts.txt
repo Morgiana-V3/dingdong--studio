@@ -1,0 +1,21 @@
+MiniPush 物品贴纸图标
+生成方式：内置 image_gen，透明背景。未采用机器人版本。
+保存目录：/Users/xieqi/Desktop/MiniPush/src/ui/assets/icons/
+
+tasks.png
+Use case: stylized-concept. Asset type: tasks navigation icon for a cartoon stationery desktop app. Draw ONE a golden yellow clipboard with a cream checklist sheet and a large mint green check mark. Polished die-cut sticker, rounded chunky shapes, thick dark cocoa outlines, flat pastel colors, crisp white sticker border and subtle paper shadow. Friendly hand-drawn stationery style. Single icon centered, full subject fills 85% of square frame. Very simple silhouette legible at 32px, no text or letters, no scene, no additional scattered decorations. Actual transparent background.
+
+plugins.png
+Use case: stylized-concept. Asset type: plugins navigation icon for a cartoon stationery desktop app. Draw ONE a chunky lavender puzzle piece with a tiny peach connector detail. Polished die-cut sticker, rounded chunky shapes, thick dark cocoa outlines, flat pastel colors, crisp white sticker border and subtle paper shadow. Friendly hand-drawn stationery style. Single icon centered, full subject fills 85% of square frame. Very simple silhouette legible at 32px, no text or letters, no scene, no additional scattered decorations. Actual transparent background.
+
+channels.png
+Use case: stylized-concept. Asset type: channels navigation icon for a cartoon stationery desktop app. Draw ONE a coral pink smartphone with a cream screen showing a mint green envelope notification. Polished die-cut sticker, rounded chunky shapes, thick dark cocoa outlines, flat pastel colors, crisp white sticker border and subtle paper shadow. Friendly hand-drawn stationery style. Single icon centered, full subject fills 85% of square frame. Very simple silhouette legible at 32px, no text or letters, no scene, no additional scattered decorations. Actual transparent background.
+
+providers.png
+Use case: stylized-concept. Asset type: AI navigation icon for a cartoon stationery desktop app. Draw ONE butter-yellow glass lightbulb with a mint green metal screw base, dark cocoa filament and three short golden light rays. Inanimate physical object, no face, no eyes, no mouth, no robot or human features. Polished die-cut sticker, rounded chunky shapes, thick dark cocoa outlines, flat pastel colors, crisp white sticker border and subtle paper shadow. Friendly stationery style. Single icon centered, full subject fills 85% of square frame. Very simple silhouette legible at 32px, no text, no scene. Actual transparent background.
+
+history.png
+Use case: stylized-concept. Asset type: history navigation icon for a cartoon stationery desktop app. Draw ONE a powder blue alarm clock with a cream face, simple dark brown clock hands and small yellow bells. Polished die-cut sticker, rounded chunky shapes, thick dark cocoa outlines, flat pastel colors, crisp white sticker border and subtle paper shadow. Friendly hand-drawn stationery style. Single icon centered, full subject fills 85% of square frame. Very simple silhouette legible at 32px, no text or letters, no scene, no additional scattered decorations. Actual transparent background.
+
+settings.png
+Use case: stylized-concept. Asset type: settings navigation icon for a cartoon stationery desktop app. Draw ONE a peach and butter yellow gear with a cream circular center. Polished die-cut sticker, rounded chunky shapes, thick dark cocoa outlines, flat pastel colors, crisp white sticker border and subtle paper shadow. Friendly hand-drawn stationery style. Single icon centered, full subject fills 85% of square frame. Very simple silhouette legible at 32px, no text or letters, no scene, no additional scattered decorations. Actual transparent background.

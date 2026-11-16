@@ -1,0 +1,40 @@
+{
+  "apiVersion": 1,
+  "id": "bilibili-videos",
+  "name": "B 站关注视频",
+  "version": "1.2.1",
+  "description": "登录 B 站后选择关注的 UP 主，推送新视频标题、简介和链接。",
+  "entry": "index.cjs",
+  "capabilities": ["bilibili.read"],
+  "fields": [
+    {
+      "key": "accountMid",
+      "label": "订阅账号 UID",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "upIds",
+      "label": "订阅 UP 主 UID（逗号分隔）",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "keywords",
+      "label": "标题或简介关键词（逗号分隔，任一匹配）",
+      "type": "text"
+    },
+    {
+      "key": "useAI",
+      "label": "使用 AI 整理简介（不代表完整视频摘要）",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "maxItems",
+      "label": "每次最多推送条数",
+      "type": "number",
+      "default": 8
+    }
+  ]
+}

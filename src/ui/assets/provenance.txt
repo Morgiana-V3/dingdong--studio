@@ -1,0 +1,14 @@
+MiniPush cartoon sticker theme
+
+Visual references:
+https://culturedcode.com/things/ — task hierarchy and clear desktop navigation
+https://finchcare.com/ — friendly illustrated character direction
+No artwork copied from these sites.
+
+mini-courier.png generated with the built-in image_gen tool on 2026-11-14.
+Original output preserved under ~/.codex/generated_images/01a1d8bb-da26-7ac2-abde-65cd92c362f7/exec-efd08992-514d-4400-b0d4-625250bbaa92.png.
+MiniPush.icns now uses icons/channels.png (an inanimate phone sticker). The courier mascot is no longer displayed. See icons/prompts.txt for current icon prompts.
+Navigation icons are project-local SVG paths in src/ui/icons.js.
+
+Final generation prompt:
+Use case: stylized-concept. Asset type: transparent mascot sticker for MiniPush, a personal Mac mini automation and phone notification desktop app. Draw one adorable little desktop computer courier, a rounded cream-colored miniature computer with a mint green face screen, simple dark eyes and warm peach cheek dots, tiny dark feet and mitten hands holding a coral pink envelope with a small yellow star seal. Cheerful but understated. Single cohesive die-cut stationery sticker illustration, bold rounded charcoal-brown outlines, flat pastel fills, white die-cut border, very slight offset paper shadow, polished friendly Japanese stationery aesthetic. Nearly front view with slight three-quarter angle. Center whole subject with comfortable transparent margin. The mascot itself should fill about 82 percent of the square canvas, strong silhouette legible at 80px. No background scene, no lettering, no logos, no extra floating objects. Actual transparent background.
