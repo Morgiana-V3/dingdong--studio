@@ -1,4 +1,5 @@
 import { Xiaohongshu } from './xiaohongshu.cjs'
+import { MobileControl } from './mobile-control.cjs'
 import * as xhsPlugin from '../examples/xiaohongshu/index.cjs'
 import { DIGEST_ID, digestSources, digestOwner, sourceIds } from './digest.cjs'
 import { dingdongDocument, compatibleLink } from './dingdong-document.cjs'
@@ -52,6 +53,7 @@ let window: BrowserWindow
 let store: Store
 let plugins: Plugins
 let engine: Engine
+let mobileControl: MobileControl | undefined
 let quitting = false
 
 function openWindow() {
@@ -154,7 +156,12 @@ app
 
     const handlers: Handlers = {
       snapshot() {
-        return { ...store.snapshot(), plugins: plugins.list(), running: [...engine.running.keys()] }
+        return {
+          ...store.snapshot(),
+          plugins: plugins.list(),
+          running: [...engine.running.keys()],
+          mobileControlStatus: mobileControl?.status,
+        }
       },
       async importPlugin() {
         const selected = await dialog.showOpenDialog(window, {
@@ -692,14 +699,45 @@ app
         engine.running.get(id)?.abort()
       },
       preferences(input) {
-        store.state.preferences.startAtLogin = Boolean(input.startAtLogin)
-        app.setLoginItemSettings({ openAtLogin: store.state.preferences.startAtLogin })
+        if (input.mobileChannelId !== undefined) {
+          if (
+            input.mobileChannelId &&
+            !store.state.channels.some(
+              (channel) => channel.id === input.mobileChannelId && channel.kind === 'dingdong',
+            )
+          ) {
+            throw new Error('请选择叮咚推送渠道')
+          }
+          store.state.preferences.mobileChannelId = input.mobileChannelId
+        }
+        if (input.startAtLogin !== undefined) {
+          store.state.preferences.startAtLogin = Boolean(input.startAtLogin)
+          app.setLoginItemSettings({ openAtLogin: store.state.preferences.startAtLogin })
+        }
         store.save()
+        changed()
       },
       openExamples() {
         return shell.openPath(path.join(runtimeRoot, 'examples'))
       },
     }
+
+    mobileControl = new MobileControl(
+      () => {
+        const channel = store.state.channels.find(
+          (entry) =>
+            entry.id === store.state.preferences.mobileChannelId && entry.kind === 'dingdong',
+        )
+        return channel
+          ? { id: channel.id, baseUrl: channel.baseUrl || '', key: store.decrypt(channel.secret) }
+          : undefined
+      },
+      handlers,
+      (url, options) => net.fetch(url, options),
+      changed,
+      (message) => store.redact(message),
+    )
+    mobileControl.start()
 
     ipcMain.handle('invoke', async (event, action: keyof Handlers, payload: unknown) => {
       if (event.sender !== window.webContents || !Object.hasOwn(handlers, action)) {
@@ -730,6 +768,7 @@ app
     app.on('second-instance', openWindow)
     app.on('before-quit', () => {
       quitting = true
+      mobileControl?.stop()
       engine.stop()
       x.stop()
     })

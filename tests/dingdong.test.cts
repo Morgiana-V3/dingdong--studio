@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { channelConnection, relayAddress } from '../src/channels.cjs'
-import { dingdongDocument } from '../src/dingdong-document.cjs'
+import { dingdongDocument, compatibleLink } from '../src/dingdong-document.cjs'
 import { sendDingdong, deliveryStatus } from '../src/dingdong.cjs'
 import type { Channel, Fetcher } from '../src/types.cjs'
 
@@ -21,6 +21,24 @@ const message = {
 }
 const pixel =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/lXcAAAAASUVORK5CYII='
+
+test('supported Bilibili and XHS content routes retain web fallbacks and share tokens', () => {
+  assert.equal(
+    compatibleLink('bilibili://video/123456789'),
+    'https://www.bilibili.com/video/av123456789',
+  )
+  assert.equal(
+    compatibleLink('bilibili://video/BV1234567890'),
+    'https://www.bilibili.com/video/BV1234567890',
+  )
+  const xhs = compatibleLink(
+    'xhsdiscover://item/1234567890abcdef12345678?xsec_token=fictional%2Btoken&xsec_source=pc_feed',
+  )!
+  assert.equal(new URL(xhs).searchParams.get('xsec_token'), 'fictional+token')
+  assert.equal(new URL(xhs).pathname, '/explore/1234567890abcdef12345678')
+  assert.equal(compatibleLink('xhsdiscover://login/1234567890abcdef12345678'), undefined)
+  assert.equal(compatibleLink('intent://content/#Intent;component=evil;end'), undefined)
+})
 
 test('Dingdong addresses and credentials reject changed destinations without a new key', () => {
   assert.equal(relayAddress('127.0.0.1:8080/'), 'http://127.0.0.1:8080')

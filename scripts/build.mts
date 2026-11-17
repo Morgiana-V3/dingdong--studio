@@ -33,10 +33,20 @@ for (const filename of ['README.md', 'THIRD_PARTY_NOTICES.txt']) {
   fs.copyFileSync(path.join(root, filename), path.join(build, filename))
 }
 // Copy the production dependency graph, including nested dependencies, without dev tools.
-const dependencies = execFileSync('npm', ['ls', '--omit=dev', '--all', '--parseable'], {
-  cwd: root,
-  encoding: 'utf8',
-})
+// npm is a .cmd shim on Windows; invoke its JS entry point without a shell.
+const npmCLI =
+  process.env.npm_execpath ||
+  (process.platform === 'win32'
+    ? path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js')
+    : undefined)
+const dependencies = execFileSync(
+  npmCLI ? process.execPath : 'npm',
+  [...(npmCLI ? [npmCLI] : []), 'ls', '--omit=dev', '--all', '--parseable'],
+  {
+    cwd: root,
+    encoding: 'utf8',
+  },
+)
   .trim()
   .split('\n')
 for (const dependency of new Set(dependencies)) {

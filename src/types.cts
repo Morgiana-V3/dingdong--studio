@@ -142,9 +142,10 @@ export interface Settings {
   providers: Provider[]
   tasks: Task[]
   history: RunRecord[]
-  preferences: { startAtLogin: boolean }
+  preferences: { startAtLogin: boolean; mobileChannelId?: string }
 }
 export interface Snapshot extends Settings {
+  mobileControlStatus?: string
   plugins: InstalledPlugin[]
   running: string[]
 }

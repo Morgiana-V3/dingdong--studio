@@ -39,6 +39,27 @@ export function compatibleLink(address: string): string | undefined {
     if (['http:', 'https:', 'mailto:'].includes(url.protocol) && !url.username && !url.password) {
       return url.href
     }
+    if (!url.username && !url.password && !url.port) {
+      const id = url.pathname.slice(1)
+      if (
+        url.protocol === 'bilibili:' &&
+        url.hostname === 'video' &&
+        /^(BV[A-Za-z0-9]+|\d{1,25})$/.test(id)
+      ) {
+        return 'https://www.bilibili.com/video/' + (id.startsWith('BV') ? id : 'av' + id)
+      }
+      if (
+        url.protocol === 'xhsdiscover:' &&
+        url.hostname === 'item' &&
+        /^[a-fA-F0-9]{24}$/.test(id)
+      ) {
+        const web = new URL('https://www.xiaohongshu.com/explore/' + id)
+        for (const key of ['xsec_token', 'xsec_source']) {
+          if (url.searchParams.has(key)) web.searchParams.set(key, url.searchParams.get(key)!)
+        }
+        return web.href
+      }
+    }
   } catch {
     /* Relative and unrecognized app links are not usable in the reader. */
   }

@@ -12,6 +12,7 @@ const suites = [
   'verify-xhs-reader.cjs',
   'verify-dingdong.cjs',
   'verify-digest.cjs',
+  'verify-mobile-control.cjs',
 ]
 
 for (const suite of suites) {

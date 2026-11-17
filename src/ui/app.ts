@@ -295,6 +295,26 @@ function render() {
       : '<div class="empty"><h2>暂无运行记录</h2><p>执行任务后，结果会显示在这里。</p></div>'
   } else {
     content.innerHTML = `<div class="settings"><div class="list"><div class="row"><div class="row-info"><h3>登录 Mac 时启动</h3><div class="meta">在登录账户后启动应用并恢复调度</div></div><input id="login-toggle" type="checkbox" aria-label="登录时启动" ${snapshot.preferences.startAtLogin ? 'checked' : ''}></div></div><p class="section-note">关闭窗口后任务继续运行。退出应用、关机或睡眠期间暂停执行，恢复后逾期任务补跑一次。所有时间采用北京时间。</p><p class="section-note">运行记录保留最近 300 条。投递失败保留错误，支持手动重跑。中断后的任务请检查是否已送达再重试。</p></div>`
+    content.querySelector('.settings')!.insertAdjacentHTML(
+      'beforeend',
+      `<div class="list"><div class="row"><div class="row-info"><h3>允许手机管理订阅</h3><p class="meta">使用同一叮咚服务器的手机接收密钥，可新增、编辑、启停和删除内置订阅。电脑需保持运行。平台登录、插件安装和密钥配置仍在电脑完成。</p><label>连接渠道<select id="mobile-channel">${option('', '关闭手机管理', snapshot.preferences.mobileChannelId || '')}${snapshot.channels
+        .filter((entry) => entry.kind === 'dingdong')
+        .map((entry) => option(entry.id, entry.name, snapshot.preferences.mobileChannelId))
+        .join(
+          '',
+        )}</select></label><p role="status">${escape(snapshot.mobileControlStatus || '手机管理未开启')}</p></div></div></div>`,
+    )
+    getElement<HTMLSelectElement>(document, '#mobile-channel').onchange = async (event) => {
+      try {
+        await api.invoke('preferences', {
+          mobileChannelId: (event.target as HTMLSelectElement).value,
+        })
+        notice('手机管理设置已保存')
+        await refresh()
+      } catch (error) {
+        notice(errorMessage(error), true)
+      }
+    }
     getElement<HTMLElement>(document, '#login-toggle').addEventListener('change', async (event) => {
       try {
         await api.invoke('preferences', {

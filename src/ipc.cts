@@ -64,7 +64,7 @@ export interface Handlers {
   deleteTask(id: string): void
   runTask(id: string): Promise<RunRecord>
   cancelTask(id: string): void
-  preferences(input: { startAtLogin: boolean }): void
+  preferences(input: { startAtLogin?: boolean; mobileChannelId?: string }): void
   openExamples(): Promise<string>
 }
 export interface MiniPushAPI {

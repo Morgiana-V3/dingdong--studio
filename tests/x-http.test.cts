@@ -125,7 +125,10 @@ test('encrypted X credentials survive restart, omit unrelated cookies, clear and
     assert.deepEqual(new XCredentials(directory, codec).load(), cookies)
     const filename = path.join(directory, 'x-session.encrypted.json')
     assert.doesNotMatch(fs.readFileSync(filename, 'utf8'), /private-token|private-csrf/)
-    assert.equal(fs.statSync(filename).mode & 0o777, 0o600)
+    // Windows does not implement POSIX group/other permission bits.
+    if (process.platform !== 'win32') {
+      assert.equal(fs.statSync(filename).mode & 0o777, 0o600)
+    }
     assert.throws(() => validateXCookies([{ name: 'auth_token', value: 'bad\nvalue' }]), /不完整/)
     fs.writeFileSync(filename, '{}')
     assert.throws(() => store.load(), /解密/)
